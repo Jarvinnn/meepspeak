@@ -9,19 +9,20 @@ import net.runelite.client.config.ConfigSection;
 public interface NpcNamesConfig extends Config
 {
 	String GROUP = "NpcNamesConfig";
+
 	@ConfigSection(
 			name = "NPCs",
 			description = "NPC Section",
-			position = 0,
-			closedByDefault = true
+			position = 0
 	)
-	String npc = "NPCs";
+	String npcs = "NPCs";
+
 	@ConfigItem(
 			position = 0,
 			keyName = "npcNameToggle",
-			name = "Enable default NPC renames",
-			description = "Toggle to turn all default npc  names on/off",
-			section = npc
+			name = "Enable Default NPC Renames",
+			description = "Toggle to turn all default npc names on/off",
+			section = npcs
 	)
 	default boolean npcNameToggle()
 	{
@@ -31,27 +32,26 @@ public interface NpcNamesConfig extends Config
 	@ConfigItem(
 			position = 1,
 			keyName = "customNPCList",
-			name = "Custom NPC name list",
-			description = "Change NPC names using csv",
-			section = npc
+			name = "Custom NPC Name List",
+			description = "Custom NPC Name List (CSV Format)",
+			section = npcs
 	)
 	default String customNPCList()
 	{
-		return "Rat,Invent Tagger\n";
+		return "Rat,Invent Tagger\nGuard,Op";
 	}
 
 	@ConfigSection(
 			name = "Items",
 			description = "Item Section",
-			position = 1,
-			closedByDefault = true
+			position = 1
 	)
 	String items = "Items";
 
 	@ConfigItem(
 			position = 0,
 			keyName = "itemNameToggle",
-			name = "Enable default item renames",
+			name = "Enable Default Item Renames",
 			description = "Toggle to turn all default item names on/off",
 			section = items
 	)
@@ -63,13 +63,12 @@ public interface NpcNamesConfig extends Config
 	@ConfigItem(
 			position = 1,
 			keyName = "customItemList",
-			name = "Custom item name list",
-			description = "Change item names using csv",
+			name = "Custom Item List",
+			description = "Custom Item List (CSV Format)",
 			section = items
 	)
 	default String customItemList()
 	{
-		return "";
+		return "Swift blade,Poke\nDragon warhammer,Bonk";
 	}
-
 }
