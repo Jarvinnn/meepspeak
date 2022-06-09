@@ -8,6 +8,7 @@ import net.runelite.api.*;
 import net.runelite.api.events.BeforeRender;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -34,7 +35,8 @@ public class NpcNamesPlugin extends Plugin {
             MenuAction.NPC_FIRST_OPTION, MenuAction.NPC_SECOND_OPTION,
             MenuAction.NPC_THIRD_OPTION, MenuAction.NPC_FOURTH_OPTION,
             MenuAction.NPC_FIFTH_OPTION, MenuAction.WIDGET_TARGET_ON_NPC,
-            MenuAction.ITEM_USE_ON_NPC, MenuAction.EXAMINE_NPC, MenuAction.EXAMINE_OBJECT);
+            MenuAction.ITEM_USE_ON_NPC, MenuAction.EXAMINE_NPC,
+            MenuAction.EXAMINE_OBJECT);
 
     private static final Set<MenuAction> ITEM_MENU_ACTIONS = ImmutableSet.of(
             MenuAction.ITEM_FIRST_OPTION, MenuAction.ITEM_SECOND_OPTION,
@@ -190,6 +192,12 @@ public class NpcNamesPlugin extends Plugin {
     }
 
     private void remapWidget(Widget widget) {
+        final int groupId = WidgetInfo.TO_GROUP(widget.getId());
+        final int CHAT_MESSAGE = 162, PRIVATE_MESSAGE = 163, FRIENDS_LIST = 429;
+
+        if (groupId == CHAT_MESSAGE || groupId == PRIVATE_MESSAGE || groupId == FRIENDS_LIST)
+            return;
+
         Widget[] children = widget.getDynamicChildren();
         if (children == null)
             return;
@@ -248,48 +256,19 @@ public class NpcNamesPlugin extends Plugin {
         }
     }
 
-
     @Subscribe
     protected void onMenuEntryAdded(MenuEntryAdded event) {
-        //       NPC npc = client.getCachedNPCs()[event.getIdentifier()];
-        //       int npcId = npc.getId();
-
-        //       if (npc.getId() != NpcID.BLACK_DRAGON_254) {
-
         MenuEntry[] menuEntries = client.getMenuEntries();
 
         for (MenuEntry menuEntry : menuEntries) {
-            String target = menuEntry.getTarget();
-            String cleanTarget = Text.removeTags(target);
-
             if (NPC_MENU_ACTIONS.contains(menuEntry.getType())) {
-                if (npcNamesConfig.npcNameToggle()) {
-                    for (Map.Entry<String, String> entry : NPCNameRemap.entrySet()) {
-                        if (cleanTarget.contains(entry.getKey())) {
-                            menuEntry.setTarget(target.replace(entry.getKey(), entry.getValue()));
-                        }
-                    }
-                }
-
-                for (Map.Entry<String, String> entry : CustomNPCRemap.entrySet()) {
-                    if (cleanTarget.contains(entry.getKey())) {
-                        menuEntry.setTarget(target.replace(entry.getKey(), entry.getValue()));
-                    }
-                }
+                if (npcNamesConfig.npcNameToggle())
+                    RemapMenuEntryText(menuEntry, NPCNameRemap);
+                RemapMenuEntryText(menuEntry, CustomNPCRemap);
             } else if (ITEM_MENU_ACTIONS.contains(menuEntry.getType())) {
-                if (npcNamesConfig.itemNameToggle()) {
-                    for (Map.Entry<String, String> entry : ItemNameRemap.entrySet()) {
-                        if (cleanTarget.contains(entry.getKey())) {
-                            menuEntry.setTarget("<col=ff9040>" + entry.getValue() + "</col>");
-                        }
-                    }
-                }
-
-                for (Map.Entry<String, String> entry : CustomItemRemap.entrySet()) {
-                    if (cleanTarget.contains(entry.getKey())) {
-                        menuEntry.setTarget("<col=ff9040>" + entry.getValue() + "</col>");
-                    }
-                }
+                if (npcNamesConfig.itemNameToggle())
+                    RemapMenuEntryText(menuEntry, ItemNameRemap);
+                RemapMenuEntryText(menuEntry, CustomItemRemap);
             }
         }
 
@@ -300,7 +279,7 @@ public class NpcNamesPlugin extends Plugin {
         String target = menuEntry.getTarget();
         String cleanTarget = Text.removeTags(target);
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (cleanTarget.equalsIgnoreCase(entry.getKey())) {
+            if (cleanTarget.contains(entry.getKey())) {
                 menuEntry.setTarget(target.replace(entry.getKey(), entry.getValue()));
             }
         }
@@ -310,7 +289,7 @@ public class NpcNamesPlugin extends Plugin {
         String target = menuEntry.getTarget();
         String cleanTarget = Text.removeTags(target);
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (cleanTarget.equalsIgnoreCase(entry.getKey())) {
+            if (cleanTarget.contains(entry.getKey())) {
                 menuEntry.setTarget(target.replace(entry.getKey(), entry.getValue()));
             }
         }
