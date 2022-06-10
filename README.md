@@ -1,8 +1,8 @@
 # meepspeak
 Simple plugin that changes NPC/item/widget names to "meepspeak" in the following:
-- Official OSRS Health bar (CoX, Inferno, etc)
+- Official OSRS health bar (Chambers of Xeric, Inferno, etc)
 - Menu option (right-click)
-- ToB widgets
+- Theatre of Blood widgets
 
 **Note: This was created for entertainment purposes only and provides no benefits when used.**
 
