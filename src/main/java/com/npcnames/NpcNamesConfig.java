@@ -38,7 +38,7 @@ public interface NpcNamesConfig extends Config
 	)
 	default String customNPCList()
 	{
-		return "Rat,Invent Tagger\nGuard,Op";
+		return "Rat,Invent Tagger";
 	}
 
 	@ConfigSection(
@@ -69,6 +69,6 @@ public interface NpcNamesConfig extends Config
 	)
 	default String customItemList()
 	{
-		return "Swift blade,Poke\nDragon warhammer,Bonk";
+		return "";
 	}
 }

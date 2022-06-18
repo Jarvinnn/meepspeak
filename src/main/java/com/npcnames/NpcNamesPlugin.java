@@ -35,20 +35,12 @@ public class NpcNamesPlugin extends Plugin {
             MenuAction.NPC_FIRST_OPTION, MenuAction.NPC_SECOND_OPTION,
             MenuAction.NPC_THIRD_OPTION, MenuAction.NPC_FOURTH_OPTION,
             MenuAction.NPC_FIFTH_OPTION, MenuAction.WIDGET_TARGET_ON_NPC,
-            MenuAction.ITEM_USE_ON_NPC, MenuAction.EXAMINE_NPC,
-            MenuAction.EXAMINE_OBJECT);
+            MenuAction.EXAMINE_NPC, MenuAction.EXAMINE_OBJECT);
 
     private static final Set<MenuAction> ITEM_MENU_ACTIONS = ImmutableSet.of(
-            MenuAction.ITEM_FIRST_OPTION, MenuAction.ITEM_SECOND_OPTION,
-            MenuAction.ITEM_THIRD_OPTION, MenuAction.ITEM_FOURTH_OPTION,
-            MenuAction.ITEM_FIFTH_OPTION,
             MenuAction.GROUND_ITEM_FIRST_OPTION, MenuAction.GROUND_ITEM_SECOND_OPTION,
             MenuAction.GROUND_ITEM_THIRD_OPTION, MenuAction.GROUND_ITEM_FOURTH_OPTION,
-            MenuAction.GROUND_ITEM_FIFTH_OPTION,
-            MenuAction.ITEM_USE, MenuAction.ITEM_USE_ON_PLAYER,
-            MenuAction.ITEM_USE_ON_ITEM, MenuAction.ITEM_USE_ON_GROUND_ITEM,
-            MenuAction.ITEM_USE_ON_NPC, MenuAction.ITEM_USE_ON_GAME_OBJECT,
-            MenuAction.EXAMINE_ITEM, MenuAction.EXAMINE_ITEM_GROUND,
+            MenuAction.GROUND_ITEM_FIFTH_OPTION, MenuAction.EXAMINE_ITEM_GROUND,
             // Inventory + Using Item on Players/NPCs/Objects
             MenuAction.CC_OP, MenuAction.CC_OP_LOW_PRIORITY, MenuAction.WIDGET_TARGET,
             MenuAction.WIDGET_TARGET_ON_PLAYER, MenuAction.WIDGET_TARGET_ON_NPC,
@@ -101,6 +93,7 @@ public class NpcNamesPlugin extends Plugin {
             .put("General Graardor", "ouchi unicorn ogre man")
             .put("Nex", "yuck speedy winged demon lady thing wiff goat feet")
             .put("Black dragon", "down ear dragon puppy wiff spipey tail")
+            .put("Blue dragon", "unicorn dragon wiff a ball on his tail")
             .put("Cerberus", "three headed awoo lava puppy")
             .put("Corporeal Beast", "giant mummy puppy")
             .put("The Nightmare", "yucky crouchie nasty sleep lady")
@@ -108,6 +101,17 @@ public class NpcNamesPlugin extends Plugin {
             .put("Giant Mole", "diggy scratchy feet baby wiff whiskers")
             .put("Kalphite Queen", "spipey crawly flying bug wiff pinchers")
             .put("Penance Queen", "one eyed creepy alien wiff a tummy bump")
+            .put("Demonic gorilla", "angry monkee")
+            .put("Brawler", "elephant man")
+            .put("Torcher", "worm bat")
+            .put("Ravager", "mole scratch man")
+            .put("Defiler", "kitty meow")
+            .put("Splatter", "bouncy ball")
+            .build();
+
+    private static final ImmutableMap<String, Set<Integer>> NPCFilterList = ImmutableMap.<String, Set<Integer>>builder()
+            .put("Black dragon", Set.of(NpcID.BLACK_DRAGON_254))
+            .put("Blue dragon", Set.of(NpcID.BLUE_DRAGON_268))
             .build();
 
     private final HashMap<String, String> CustomNPCRemap = new HashMap<>();
@@ -145,7 +149,8 @@ public class NpcNamesPlugin extends Plugin {
         parseConfig();
     }
 
-    private void parseConfig() {
+    private void parseConfig()
+    {
         CustomItemRemap.clear();
         CustomNPCRemap.clear();
 
@@ -155,7 +160,8 @@ public class NpcNamesPlugin extends Plugin {
                 return;
 
             String[] pairs = customNPCs.split("\n");
-            for (String pair : pairs) {
+            for (String pair : pairs)
+            {
                 String[] kv = pair.split(",");
                 if (kv.length != 2)
                     continue;
@@ -170,7 +176,8 @@ public class NpcNamesPlugin extends Plugin {
                 return;
 
             String[] pairs = customItems.split("\n");
-            for (String pair : pairs) {
+            for (String pair : pairs)
+            {
                 String[] kv = pair.split(",");
                 if (kv.length != 2)
                     continue;
@@ -191,7 +198,8 @@ public class NpcNamesPlugin extends Plugin {
         }
     }
 
-    private void remapWidget(Widget widget) {
+    private void remapWidget(Widget widget)
+    {
         final int groupId = WidgetInfo.TO_GROUP(widget.getId());
         final int CHAT_MESSAGE = 162, PRIVATE_MESSAGE = 163, FRIENDS_LIST = 429;
 
@@ -215,67 +223,64 @@ public class NpcNamesPlugin extends Plugin {
             mapWidgetText(childComponents);
     }
 
-
-    private void mapWidgetText(Widget[] childComponents) {
-        for (Widget component : childComponents) {
+    private void mapWidgetText(Widget[] childComponents)
+    {
+        for (Widget component : childComponents)
+        {
             remapWidget(component);
 
             String text = component.getText();
             if (text.isEmpty())
                 continue;
 
-            if (npcNamesConfig.npcNameToggle()) {
-                for (Map.Entry<String, String> entry : NPCNameRemap.entrySet()) {
-                    if (text.contains(entry.getKey())) {
-                        component.setText(text.replace(entry.getKey(), entry.getValue()));
-                    }
-                }
-            }
+            if (npcNamesConfig.npcNameToggle())
+                RemapWidgetText(component, text, NPCNameRemap);
 
-            for (Map.Entry<String, String> entry : CustomNPCRemap.entrySet()) {
-                if (text.contains(entry.getKey())) {
-                    component.setText(text.replace(entry.getKey(), entry.getValue()));
-                }
+            if (npcNamesConfig.itemNameToggle())
+                RemapWidgetText(component, text, ItemNameRemap);
+
+            RemapWidgetText(component, text, CustomNPCRemap);
+            RemapWidgetText(component, text, CustomItemRemap);
+        }
+    }
+
+    private void RemapWidgetText(Widget component, String text, HashMap<String, String> map)
+    {
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (text.equalsIgnoreCase(entry.getKey())) {
+                component.setText(text.replace(entry.getKey(), entry.getValue()));
+                return;
             }
         }
     }
 
-    private void RemapWidgetText(Widget component, String text, HashMap<String, String> map) {
+    private void RemapWidgetText(Widget component, String text, ImmutableMap<String, String> map)
+    {
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (text.contains(entry.getKey())) {
+            if (text.equalsIgnoreCase(entry.getKey())) {
                 component.setText(text.replace(entry.getKey(), entry.getValue()));
-            }
-        }
-    }
-
-    private void RemapWidgetText(Widget component, String text, ImmutableMap<String, String> map) {
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (text.contains(entry.getKey())) {
-                component.setText(text.replace(entry.getKey(), entry.getValue()));
+                return;
             }
         }
     }
 
     @Subscribe
-    protected void onMenuEntryAdded(MenuEntryAdded event) {
-        MenuEntry[] menuEntries = client.getMenuEntries();
-
-        for (MenuEntry menuEntry : menuEntries) {
-            if (NPC_MENU_ACTIONS.contains(menuEntry.getType())) {
-                if (npcNamesConfig.npcNameToggle())
-                    RemapMenuEntryText(menuEntry, NPCNameRemap);
-                RemapMenuEntryText(menuEntry, CustomNPCRemap);
-            } else if (ITEM_MENU_ACTIONS.contains(menuEntry.getType())) {
-                if (npcNamesConfig.itemNameToggle())
-                    RemapMenuEntryText(menuEntry, ItemNameRemap);
-                RemapMenuEntryText(menuEntry, CustomItemRemap);
-            }
+    protected void onMenuEntryAdded(MenuEntryAdded event)
+    {
+        MenuEntry entry = event.getMenuEntry();
+        if (NPC_MENU_ACTIONS.contains(entry.getType())) {
+            if (npcNamesConfig.npcNameToggle() && shouldRemapName(entry))
+                RemapMenuEntryText(entry, NPCNameRemap);
+            RemapMenuEntryText(entry, CustomNPCRemap);
+        } else if (ITEM_MENU_ACTIONS.contains(entry.getType())) {
+            if (npcNamesConfig.itemNameToggle())
+                RemapMenuEntryText(entry, ItemNameRemap);
+            RemapMenuEntryText(entry, CustomItemRemap);
         }
-
-        client.setMenuEntries(menuEntries);
     }
 
-    private void RemapMenuEntryText(MenuEntry menuEntry, HashMap<String, String> map) {
+    private void RemapMenuEntryText(MenuEntry menuEntry, Map<String, String> map)
+    {
         String target = menuEntry.getTarget();
         String cleanTarget = Text.removeTags(target);
         for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -285,14 +290,24 @@ public class NpcNamesPlugin extends Plugin {
         }
     }
 
-    private void RemapMenuEntryText(MenuEntry menuEntry, ImmutableMap<String, String> map) {
-        String target = menuEntry.getTarget();
-        String cleanTarget = Text.removeTags(target);
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (cleanTarget.contains(entry.getKey())) {
-                menuEntry.setTarget(target.replace(entry.getKey(), entry.getValue()));
-            }
-        }
+    private void RemapMenuEntryText(MenuEntry menuEntry, ImmutableMap<String, String> map)
+    {
+        RemapMenuEntryText(menuEntry, (Map<String, String>) map);
+    }
+
+    private boolean shouldRemapName(MenuEntry entry)
+    {
+        NPC npc = entry.getNpc();
+        if (npc == null)
+            return true;
+
+        Set<Integer> ids = NPCFilterList.get(npc.getName());
+        if (ids == null)
+            return true;
+
+        // Do *not* remap a name if there is an entry in the filter list
+        // and the NPC does not have the correct ID
+        return ids.contains(npc.getId());
     }
 }
 
