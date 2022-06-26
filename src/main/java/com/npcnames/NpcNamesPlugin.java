@@ -65,7 +65,6 @@ public class NpcNamesPlugin extends Plugin {
             .put("Guardian", "rock throwing ouchie stone man")
             .put("TzKal-Zuk", "poops ouch balls")
             .put("Tzkal-Zuk", "poops ouch balls")
-            .put("TzTok-Jad", "stompy fire spipey man")
             .put("The Maiden of Sugadinti", "creepy ouchie blood lady")
             .put("Pestilent Bloat", "stinky stompy fat man")
             .put("The Nylocas", "confusing switchy ouchie spooders")
