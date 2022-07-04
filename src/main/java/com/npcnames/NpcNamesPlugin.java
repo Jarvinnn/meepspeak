@@ -59,6 +59,7 @@ public class NpcNamesPlugin extends Plugin {
             .put("Vespula", "ouchies sting bug")
             .put("Abyssal Portal", "ouchies sting bug portal")
             .put("Muttadile", "puppy dile")
+            .put("Skeletal Mystic", "ouchie skele mage")
             .put("Baby Muttadile", "puppy dile")
             .put("Big Muttadile", "puppy dile")
             .put("Vanguard", "crawlie ouchie trio")
@@ -106,7 +107,7 @@ public class NpcNamesPlugin extends Plugin {
             .put("Ravager", "mole scratch man")
             .put("Defiler", "kitty meow")
             .put("Splatter", "bouncy ball")
-            .put("Jelly", "bouncy marshmallow")
+            .put("Jelly", "squishy marshmallow")
             .put("King Black Dragon", "three headed uppy eardragon puppy")
             .put("Scorpia", "pokey poison ouch bug")
             .put("Callisto", "stompy ouchie wildy bear")
@@ -298,9 +299,14 @@ public class NpcNamesPlugin extends Plugin {
 
     private void RemapMenuEntryText(MenuEntry menuEntry, Map<String, String> map) {
         String target = menuEntry.getTarget();
-        String cleanTarget = Text.removeTags(target);
+        NPC npc = menuEntry.getNpc();
+        String cleanTarget = null;
+        if (npc != null)
+            cleanTarget = Text.removeTags(npc.getName());
+        else
+            cleanTarget = Text.removeTags(target);
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (cleanTarget.contains(entry.getKey())) {
+            if (cleanTarget.equals(entry.getKey())) {
                 menuEntry.setTarget(target.replace(entry.getKey(), entry.getValue()));
             }
         }
