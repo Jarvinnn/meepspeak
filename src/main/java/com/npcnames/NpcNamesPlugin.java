@@ -129,7 +129,7 @@ public class NpcNamesPlugin extends Plugin {
             .put("Yt-Hurkot", "punchy healer mans")
             .put("Jal-MejJak", "lil tree branch mans")
             .put("Tz-Kih", "fiery bat man")
-            .put("Tz-Kek", "sttripey blob man")
+            .put("Tz-Kek", "stripey blob man")
             .put("Tok-Xil", "ranger wiff a yelling face")
             .put("Yt-MejKot", "super slow punchy man")
             .put("Ket-Zek", "spipey baby lizard mager")
