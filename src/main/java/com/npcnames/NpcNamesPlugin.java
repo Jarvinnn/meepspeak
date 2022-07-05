@@ -137,8 +137,8 @@ public class NpcNamesPlugin extends Plugin {
             .build();
 
     private static final ImmutableMap<String, Set<Integer>> NPCFilterList = ImmutableMap.<String, Set<Integer>>builder()
-            .put("Black dragon", Set.of(NpcID.BLACK_DRAGON_254))
-            .put("Blue dragon", Set.of(NpcID.BLUE_DRAGON_268))
+            .put("Black dragon", ImmutableSet.of(NpcID.BLACK_DRAGON_254))
+            .put("Blue dragon", ImmutableSet.of(NpcID.BLUE_DRAGON_268))
             .build();
 
     private final HashMap<String, String> CustomNPCRemap = new HashMap<>();
