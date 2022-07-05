@@ -1,4 +1,4 @@
-package com.npcnames;
+package com.meepspeak;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -29,7 +29,7 @@ import java.util.Set;
         enabledByDefault = true,
         hidden = false
 )
-public class NpcNamesPlugin extends Plugin {
+public class meepspeakPlugin extends Plugin {
 
     private static final Set<MenuAction> NPC_MENU_ACTIONS = ImmutableSet.of(
             MenuAction.NPC_FIRST_OPTION, MenuAction.NPC_SECOND_OPTION,
@@ -148,14 +148,14 @@ public class NpcNamesPlugin extends Plugin {
     private Client client;
 
     @Inject
-    private NpcNamesConfig npcNamesConfig;
+    private meepspeakConfig meepspeakConfig;
 
     @Inject
     private ConfigManager configManager;
 
     @Provides
-    NpcNamesConfig getConfig(ConfigManager configManager) {
-        return configManager.getConfig(NpcNamesConfig.class);
+    meepspeakConfig getConfig(ConfigManager configManager) {
+        return configManager.getConfig(meepspeakConfig.class);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class NpcNamesPlugin extends Plugin {
 
     @Subscribe
     protected void onConfigChanged(ConfigChanged event) {
-        if (!event.getGroup().equals(npcNamesConfig.GROUP))
+        if (!event.getGroup().equals(meepspeakConfig.GROUP))
             return;
 
         parseConfig();
@@ -181,7 +181,7 @@ public class NpcNamesPlugin extends Plugin {
         CustomNPCRemap.clear();
 
         try {
-            String customNPCs = npcNamesConfig.customNPCList();
+            String customNPCs = meepspeakConfig.customNPCList();
             if (customNPCs.isEmpty())
                 return;
 
@@ -196,7 +196,7 @@ public class NpcNamesPlugin extends Plugin {
         }
 
         try {
-            String customItems = npcNamesConfig.customItemList();
+            String customItems = meepspeakConfig.customItemList();
             if (customItems.isEmpty())
                 return;
 
@@ -254,10 +254,10 @@ public class NpcNamesPlugin extends Plugin {
             if (text.isEmpty())
                 continue;
 
-            if (npcNamesConfig.npcNameToggle())
+            if (meepspeakConfig.npcNameToggle())
                 RemapWidgetText(component, text, NPCNameRemap);
 
-            if (npcNamesConfig.itemNameToggle())
+            if (meepspeakConfig.itemNameToggle())
                 RemapWidgetText(component, text, ItemNameRemap);
 
             RemapWidgetText(component, text, CustomNPCRemap);
@@ -287,11 +287,11 @@ public class NpcNamesPlugin extends Plugin {
     protected void onMenuEntryAdded(MenuEntryAdded event) {
         MenuEntry entry = event.getMenuEntry();
         if (NPC_MENU_ACTIONS.contains(entry.getType())) {
-            if (npcNamesConfig.npcNameToggle() && shouldRemapName(entry))
+            if (meepspeakConfig.npcNameToggle() && shouldRemapName(entry))
                 RemapMenuEntryText(entry, NPCNameRemap);
             RemapMenuEntryText(entry, CustomNPCRemap);
         } else if (ITEM_MENU_ACTIONS.contains(entry.getType())) {
-            if (npcNamesConfig.itemNameToggle())
+            if (meepspeakConfig.itemNameToggle())
                 RemapMenuEntryText(entry, ItemNameRemap);
             RemapMenuEntryText(entry, CustomItemRemap);
         }

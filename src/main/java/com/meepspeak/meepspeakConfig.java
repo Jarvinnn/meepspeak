@@ -1,14 +1,14 @@
-package com.npcnames;
+package com.meepspeak;
 
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
 
-@ConfigGroup(NpcNamesConfig.GROUP)
-public interface NpcNamesConfig extends Config
+@ConfigGroup(meepspeakConfig.GROUP)
+public interface meepspeakConfig extends Config
 {
-	String GROUP = "NpcNamesConfig";
+	String GROUP = "meepspeakConfig";
 
 	@ConfigSection(
 			name = "NPCs",
