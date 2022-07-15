@@ -55,6 +55,7 @@ public class meepspeakPlugin extends Plugin {
 
     private static final ImmutableMap<String, String> NPCNameRemap = ImmutableMap.<String, String>builder()
             .put("Tekton", "stompy rock man")
+            .put("Tekton (enraged)", "stompy rock man (enraged)")
             .put("Vasa Nistirio", "mean stompy skele stone spider")
             .put("Vespula", "ouchies sting bug")
             .put("Abyssal Portal", "ouchies sting bug portal")
@@ -78,6 +79,8 @@ public class meepspeakPlugin extends Plugin {
             .put("Ice demon", "snowball throwing ouchie ice man")
             .put("Corrupted Hunllef", "baby stompy moose puppy")
             .put("Crystalline Hunllef", "baby stompy moose puppy")
+            .put("The Corrupted Gauntlet", "The baby stompy moose puppy (Corrupted)")
+            .put("The Gauntlet", "The baby stompy moose puppy")
             .put("Great Olm", "lizard goat")
             .put("Great Olm - Head", "lizard goat - Head")
             .put("Great Olm - Left Hand", "lizard goat - Left Hand")
@@ -97,6 +100,7 @@ public class meepspeakPlugin extends Plugin {
             .put("Cerberus", "three headed awoo lava puppy")
             .put("Corporeal Beast", "giant mummy puppy")
             .put("The Nightmare", "yucky crouchie nasty sleep lady")
+            .put("Phosani's Nightmare", "yucky crouchie nasty sleep lady")
             .put("Chaos Elemental", "cotton candy monster")
             .put("Giant Mole", "diggy scratchy feet baby wiff whiskers")
             .put("Kalphite Queen", "spipey crawly flying bug wiff pinchers")
@@ -135,6 +139,10 @@ public class meepspeakPlugin extends Plugin {
             .put("Yt-MejKot", "super slow punchy man")
             .put("Ket-Zek", "spipey baby lizard mager")
             .put("TzTok-Jad", "stompy fire spipey man")
+            .put("Inferno", "Inferno (poops ouch balls)")
+            .put("The Inferno", "Inferno (poops ouch balls)")
+            .put("The Fight Caves", "The Fight Caves (stompy fire spipey man)")
+            .put("TzHaar Fight Cave", "TzHaar Fight Cave (stompy fire spipey man)")
             .build();
 
     private static final ImmutableMap<String, Set<Integer>> NPCFilterList = ImmutableMap.<String, Set<Integer>>builder()
